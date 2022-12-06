@@ -1,4 +1,5 @@
 //Math Worker by Wesley Junkins
+//Excuse the mess. This needs A LOT of work.
 //Version 1
 
 #include <iostream>

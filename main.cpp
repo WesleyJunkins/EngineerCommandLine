@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
     
-    //DECLARE VARIABLES
+    //DECLARE VARIABLES.
     int pageIdentifier = 0;
     int simpCalcPageIdentifier;
     float addFirstNum;

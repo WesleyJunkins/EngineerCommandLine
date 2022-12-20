@@ -29,10 +29,13 @@ int main()
         }  
 
         //Start reading each command token here and call the corresponding function. (Should not have to put endl inside or after calling any function since there is a cout with two endl's at the beginning of the main while loop)
+        //If there are multiple if-statements, there should follow an else, command not recognized and command.clear().
+        //Exit
         if(command.front() == "exit")
         {
             return 0;
         }
+        //test command
         if(command.front() == "wes")
         {
             command.erase(command.begin());
@@ -44,13 +47,22 @@ int main()
                     cout<<"You Better Believe it!"<<endl;
                     return 0;
                 }
-                
+                else
+                {
+                    cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+                }
+                command.clear();
             }
-            
+            else
+            {
+                cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+            }
+            command.clear();
         }
+        //Main: Command not recognized.
         else
         {
-            cout<<"Command not recognized. Type \"helo\" for a description of all commands.";
+            cout<<"Command not recognized. Type \"help\" for a description of all commands.";
         }
         command.clear();
     }

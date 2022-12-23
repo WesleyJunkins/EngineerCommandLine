@@ -11,33 +11,112 @@ int main()
     string token;
     enum mode {main, add, sub};
     mode currentMode = main;
+    float sum = 0; //For simplicity, the sum variable is used to express the result if addition, subtraction, multiplication, etc.
 
-    while(2)//currentMode == main)
+    while(1)//currentMode == main)
     {
         cout<<endl<<endl<<"main> ";
-        bool startOver = false;
+        bool startOver = false; //startOver means to bypass and "Command not found" and get the user input again.
         vector <string> command;
         getline(cin, commandLine); // use getline() function to read a line of string and store into commandLine variable.  
-        stringstream inputStream(commandLine); // inputStream is an object of stringstream that references the commandLine string  
-        while (getline(inputStream, token, ' '))   // use while loop to check the getline() function condition  
+        stringstream inputStream(commandLine); // inputStream is an object of stringstream that references the commandLine string.
+        while (getline(inputStream, token, ' '))   // use while loop to check the getline() function condition.
         {  
             /* inputStream is used to read the string from stringstream, 
             token is used to store the token string (one word between each whitespace), and 
             ' ' whitespace is used to split the string where whitespace is found. 
             */  
             command.push_back(token);  //add each token to the command vector that will be used to identify each command.
-
         }  
 
-        //Start reading each command token here and call the corresponding function. (Should not have to put endl inside or after calling any function since there is a cout with two endl's at the beginning of the main while loop)
+        //Start reading each command token here and call the corresponding function. (Should not have to put endl inside or after calling any function since there is a cout with two endl's at the beginning of the main while loop).
         //If there are multiple if-statements, there should follow an else, command not recognized and command.clear().
-        //Check for add
-        if(commandLine.find("+") != string::npos)
+        //Show and Reset sum.
+        if(command.front() == "=")
         {
-            cout<<"We want to add";
-            commandLine.clear();
+            command.erase(command.begin());
+            cout<<sum;
+            sum = 0;
+            command.clear();
             startOver = true;
         }
+        //Simple Add
+        if((command.front() == "+") || (command.front() == "-") || (command.front() == "*") || (command.front() == "/"))
+        {
+            string frontCommand = command.front();
+            command.erase(command.begin());
+            for(int i = 0; i < command.size(); i++)
+            {
+                if(command.at(i) != "=")
+                {
+                    if(frontCommand == "+")
+                    {
+                        sum+=stod(command.at(i));
+                    }
+                    if(frontCommand == "-")
+                    {
+                        sum-=stod(command.at(i));
+                    }
+                    if(frontCommand == "*")
+                    {
+                        sum*=stod(command.at(i));
+                    }
+                    if(frontCommand == "/")
+                    {
+                        sum/=stod(command.at(i));
+                    }
+                }
+            }
+            cout<<sum;
+            startOver = true;
+            if(commandLine.find("=") != string::npos)
+            {
+                sum = 0;
+                command.clear();
+            }
+            command.clear();
+        }
+        // //Simple Subtract
+        // if(command.front() == "-")
+        // {
+        //     command.erase(command.begin());
+        //     for(int i = 0; i < command.size(); i++)
+        //     {
+        //         if(command.at(i) != "=")
+        //         {
+        //             sum-=stod(command.at(i));
+        //         }
+        //     }
+        //     cout<<sum;
+        //     startOver = true;
+        //     if(commandLine.find("=") != string::npos)
+        //     {
+        //         sum = 0;
+        //         command.clear();
+        //     }
+        //     command.clear();
+        // }
+        // //Simple Multiply
+        // if(command.front() == "*")
+        // {
+        //     command.erase(command.begin());
+        //     for(int i = 0; i < command.size(); i++)
+        //     {
+        //         if(command.at(i) != "=")
+        //         {
+        //             sum*=stod(command.at(i));
+        //         }
+        //     }
+        //     cout<<sum;
+        //     startOver = true;
+        //     if(commandLine.find("=") != string::npos)
+        //     {
+        //         sum = 0;
+        //         command.clear();
+        //     }
+        //     command.clear();
+        // }
+        // //Simple Divide
         //Exit
         if(command.front() == "exit")
         {

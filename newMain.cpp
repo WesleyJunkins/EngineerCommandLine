@@ -12,9 +12,10 @@ int main()
     enum mode {main, add, sub};
     mode currentMode = main;
 
-    while(currentMode == main)
+    while(2)//currentMode == main)
     {
         cout<<endl<<endl<<"main> ";
+        bool startOver = false;
         vector <string> command;
         getline(cin, commandLine); // use getline() function to read a line of string and store into commandLine variable.  
         stringstream inputStream(commandLine); // inputStream is an object of stringstream that references the commandLine string  
@@ -30,6 +31,13 @@ int main()
 
         //Start reading each command token here and call the corresponding function. (Should not have to put endl inside or after calling any function since there is a cout with two endl's at the beginning of the main while loop)
         //If there are multiple if-statements, there should follow an else, command not recognized and command.clear().
+        //Check for add
+        if(commandLine.find("+") != string::npos)
+        {
+            cout<<"We want to add";
+            commandLine.clear();
+            startOver = true;
+        }
         //Exit
         if(command.front() == "exit")
         {
@@ -45,6 +53,7 @@ int main()
                 if(command.front() == "cool")
                 {
                     cout<<"You Better Believe it!"<<endl;
+                    cout<<commandLine;
                     return 0;
                 }
                 else
@@ -62,7 +71,10 @@ int main()
         //Main: Command not recognized.
         else
         {
-            cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+            if(startOver == false)
+            {
+                cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+            }
         }
         command.clear();
     }

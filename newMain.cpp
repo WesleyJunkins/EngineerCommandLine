@@ -40,7 +40,7 @@ int main()
             command.clear();
             startOver = true;
         }
-        //Simple Add
+        //Simple Calculations
         if((command.front() == "+") || (command.front() == "-") || (command.front() == "*") || (command.front() == "/"))
         {
             string frontCommand = command.front();
@@ -76,47 +76,6 @@ int main()
             }
             command.clear();
         }
-        // //Simple Subtract
-        // if(command.front() == "-")
-        // {
-        //     command.erase(command.begin());
-        //     for(int i = 0; i < command.size(); i++)
-        //     {
-        //         if(command.at(i) != "=")
-        //         {
-        //             sum-=stod(command.at(i));
-        //         }
-        //     }
-        //     cout<<sum;
-        //     startOver = true;
-        //     if(commandLine.find("=") != string::npos)
-        //     {
-        //         sum = 0;
-        //         command.clear();
-        //     }
-        //     command.clear();
-        // }
-        // //Simple Multiply
-        // if(command.front() == "*")
-        // {
-        //     command.erase(command.begin());
-        //     for(int i = 0; i < command.size(); i++)
-        //     {
-        //         if(command.at(i) != "=")
-        //         {
-        //             sum*=stod(command.at(i));
-        //         }
-        //     }
-        //     cout<<sum;
-        //     startOver = true;
-        //     if(commandLine.find("=") != string::npos)
-        //     {
-        //         sum = 0;
-        //         command.clear();
-        //     }
-        //     command.clear();
-        // }
-        // //Simple Divide
         //Exit
         if(command.front() == "exit")
         {

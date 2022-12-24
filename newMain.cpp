@@ -3,22 +3,59 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
+#include <fstream>
 using namespace std;
+
+class setting
+{
+    public:
+    bool active;
+    int specialAttribute;
+};
+
+void Err()
+{
+    cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+}
 
 int main()
 {
     string commandLine;
     string token;
-    enum mode {main, add, sub};
+    enum mode {main};
     mode currentMode = main;
     float sum = 0; //For simplicity, the sum variable is used to express the result if addition, subtraction, multiplication, etc.
+
+    //Default Settings - Create and initialize new settings here using the setting class.
+    setting resetSumAlways; resetSumAlways.active = false; //True: resets sum without needing "=". False by default.
+
+    //Create or Open Settings file - This holds all previous settings.
+    ifstream settingsFile;
+    settingsFile.open("settings.txt");
+    vector <string> settingsVector;
+    string singleSetting;
+    while(settingsFile>>singleSetting)
+    {
+        settingsVector.push_back(singleSetting);
+    }
+    settingsFile.close();
+    remove("settings.txt");
+    //Match current settings to saved settings. Check through every setting using if-statements inside the for-loop.
+    for(int i = 0; i < settingsVector.size(); i++)
+    {
+        if(settingsVector.at(i) == "resetSumAlways")
+        {
+            resetSumAlways.active = true;
+        }
+    }
 
     while(1)//currentMode == main)
     {
         cout<<endl<<endl<<"main> ";
-        bool startOver = false; //startOver means to bypass and "Command not found" and get the user input again.
+        commandLine.clear();
+        bool bypassErr = false; //bypassErr means to bypass "Command not found" and get the user input again.
         vector <string> command;
-        getline(cin, commandLine); // use getline() function to read a line of string and store into commandLine variable.  
+        getline(cin, commandLine); // use getline() function to read a line of string and store into commandLine variable. //If you have other cin's in the program, you might have to put cin.ignore() to keep the program from segfaulting.
         stringstream inputStream(commandLine); // inputStream is an object of stringstream that references the commandLine string.
         while (getline(inputStream, token, ' '))   // use while loop to check the getline() function condition.
         {  
@@ -38,7 +75,7 @@ int main()
             cout<<sum;
             sum = 0;
             command.clear();
-            startOver = true;
+            bypassErr = true;
         }
         //Simple Calculations
         if((command.front() == "+") || (command.front() == "-") || (command.front() == "*") || (command.front() == "/"))
@@ -49,26 +86,27 @@ int main()
             {
                 if(command.at(i) != "=")
                 {
-                    if(frontCommand == "+")
+                    if((frontCommand == "+") || (frontCommand == "add") || (frontCommand == "plus"))
                     {
                         sum+=stod(command.at(i));
                     }
-                    if(frontCommand == "-")
+                    if((frontCommand == "-") || (frontCommand == "subtract") || (frontCommand == "sub") || (frontCommand == "minus"))
                     {
                         sum-=stod(command.at(i));
                     }
-                    if(frontCommand == "*")
+                    if((frontCommand == "*") || (frontCommand == "multiply") || (frontCommand == "times") || (frontCommand == "mult"))
                     {
                         sum*=stod(command.at(i));
                     }
-                    if(frontCommand == "/")
+                    if((frontCommand == "/") || (frontCommand == "div") || (frontCommand == "divide"))
                     {
                         sum/=stod(command.at(i));
                     }
+                    //if(frontCommand == "^") || (frontCommand == "pow")                                                                                              //COME BACK
                 }
             }
             cout<<sum;
-            startOver = true;
+            bypassErr = true;
             if(commandLine.find("=") != string::npos)
             {
                 sum = 0;
@@ -81,7 +119,7 @@ int main()
         {
             return 0;
         }
-        //test command
+        //test command --- REMOVE LATER
         if(command.front() == "wes")
         {
             command.erase(command.begin());
@@ -96,22 +134,55 @@ int main()
                 }
                 else
                 {
-                    cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+                    Err();
                 }
                 command.clear();
             }
             else
             {
-                cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+                Err();
             }
             command.clear();
+        }
+        //Settings
+        if(command.front() == "setting")
+        {
+            command.erase(command.begin());
+            if(command.front() == "sum")
+            {
+                command.erase(command.begin());
+                string tempAnswer;
+                while((tempAnswer != "Y") && (tempAnswer != "y") && (tempAnswer != "N") && (tempAnswer != "n"))
+                {
+                    cout<<"\nWould you like the sum to always be reset?\n\tYes: Sum will reset to 0 after each use.\n\tNo: Sum will hold previous value in memory until program is reset or the equal \"=\" key is entered.\n\t(Y or N)> ";
+                    cin>>tempAnswer;
+                    cin.ignore();
+                }
+                if((tempAnswer == "Y") || (tempAnswer == "y"))
+                {
+                    resetSumAlways.active = true;
+                }
+                if((tempAnswer == "N") || (tempAnswer == "n"))
+                {
+                    resetSumAlways.active = false;
+                }
+            }
+            //Confirm changes to setting
+            ofstream settingsFileSave;
+            settingsFileSave.open("settings.txt", ostream::out | ostream::trunc);
+            if(resetSumAlways.active == true)
+            {
+                settingsFileSave<<"resetSumAlways\n";
+            }
+            settingsFileSave.close();
+            bypassErr = true;
         }
         //Main: Command not recognized.
         else
         {
-            if(startOver == false)
+            if(bypassErr == false)
             {
-                cout<<"Command not recognized. Type \"help\" for a description of all commands.";
+                Err();
             }
         }
         command.clear();
@@ -119,36 +190,3 @@ int main()
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//DO NOT DELETE: THIS IS A TEMPLATE
-// if(command.front() == "wes")
-// {
-//     command.erase(command.begin());
-    
-// }
